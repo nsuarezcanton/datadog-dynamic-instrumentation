@@ -1,6 +1,6 @@
-# Python
+# datadog-dynamic-instrumentation
 
-This playground provides an environment to showcase: (a) tracing Python micro-services and (b) how adding delay to services (upstream and downstream) affects the latency metric, [trace.<SPAN_NAME>](https://docs.datadoghq.com/tracing/metrics/metrics_namespace/#latency-distribution). 
+This playground provides an environment to showcase: (a) tracing Python micro-services, (b) how adding delay to services (upstream and downstream) affects the latency metric, [trace.<SPAN_NAME>](https://docs.datadoghq.com/tracing/metrics/metrics_namespace/#latency-distribution), and (c) Datadog's [Remote Configuration](https://docs.datadoghq.com/agent/remote_config/?tab=configurationyamlfile) features.
 
 It spins up three containers, a Redis instance, and a Datadog Agent:
 
@@ -10,7 +10,7 @@ It spins up three containers, a Redis instance, and a Datadog Agent:
 
 ## Requirements
 
-- [Docker](https://www.docker.com/)
+- [nerdctl](https://github.com/containerd/nerdctl). It can easily be run with [Docker](https://www.docker.com/) though.
 
 ## Getting Started
 
