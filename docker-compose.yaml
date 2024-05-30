@@ -1,0 +1,58 @@
+version: "3.1"
+
+services:
+  datadog-agent:
+    env_file:
+      - datadog.env
+    image: "datadog/agent:latest"
+    volumes:
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    ports:
+      - "8125:8125/udp"
+      - "8126:8126"
+  upstream:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        - SERVICE=upstream
+    environment:
+      DD_AGENT_HOST: "datadog-agent"
+      REDIS_HOST: "redis"
+      DOWNSTREAM_HOST: "downstream"
+    env_file:
+      - ./upstream/upstream.env
+    ports:
+      - "8100:8100"
+  downstream:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        - SERVICE=downstream
+    environment:
+      DD_AGENT_HOST: "datadog-agent"
+      REDIS_HOST: "redis"
+    env_file:
+      - ./downstream/downstream.env
+    ports:
+      - "8110:8110"
+  redis:
+    image: redis:7.0-alpine
+    ports:
+      - "6379:6379"
+  traffic:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        - SERVICE=traffic
+    environment:
+      DD_AGENT_HOST: "datadog-agent"
+      UPSTREAM_HOST: "upstream"
+    env_file:
+      - ./traffic/traffic.env
+    depends_on:
+      - upstream
